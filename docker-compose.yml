@@ -25,7 +25,7 @@ services:
     container_name: careflow_app
     restart: always
     ports:
-      - "3001:3001"
+      - "5001:3001"
     environment:
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}

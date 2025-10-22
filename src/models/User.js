@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true , unique: true, lowercase: true, trim: true},
         password: { type: String, required: true},
         roleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
-        isActive: { type: Boolean, default: true}
+        isActive: { type: Boolean, default: true},
+        passwordResetToken: { type: String, default: null, },
+        passwordResetExpire: { type: Date, default: null, },
     },
     { timestamps : true}
 )

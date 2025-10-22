@@ -3,8 +3,8 @@ import User from '../../models/User.js'
 
 export function requireAuth(loadUserFromDb = false) {
     return async (req, res, next) => {
-        const auth = req.header.authorization || '' // read -> header Authorization
-        const token = auth.startWith('Bearer ' ) // check if form => Bearer xxx
+        const auth = req.headers.authorization || '' // read -> header Authorization
+        const token = auth.startsWith('Bearer ') // check if form => Bearer xxx
         ? auth.slice(7) // Extraire just after Bearer
         : null
 

@@ -5,5 +5,5 @@ const schema = Joi.object({
 })
 
 export function validateLogout(body){
-  return schema.validate(body, { abortEarly: false })
+  return schema.validate(body, { abortEarly: false }) // when true, stops validation on the first error, otherwise returns all the errors found. 
 }

@@ -5,8 +5,10 @@ import morgan from 'morgan';
 import logger from './logger/logger.js';
 
 import authRoutes from "./routes/authRoutes.js"
+import adminRoutes from './routes/adminRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
-
+import patientRoutes from './routes/patientRoutes.js'
+import appointmentRoutes from './routes/appointmentRoutes.js';
 
 const app = express();
 
@@ -31,5 +33,9 @@ app.get('/', (req, res) => {
 
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/patients', patientRoutes);
+app.use('/api/appointments', appointmentRoutes);  
+
 
 export default app;
