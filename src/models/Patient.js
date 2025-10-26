@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 
-// contact sub document
 const ContactSchema = new mongoose.Schema({         
   phone: { type: String, trim: true },             
   email: { type: String, trim: true, lowercase: true }, 
@@ -9,10 +8,17 @@ const ContactSchema = new mongoose.Schema({
   country: { type: String, trim: true }             
 }, { _id: false }) // no _id for sub doc
 
+const InsuranceSchema = new mongoose.Schema({
+  provider: { type: String, trim: true },
+  policyNumber: { type: String, trim: true }
+}, { _id: false }) // no _id for sub doc
+
 const PatientSchema = new mongoose.Schema(   
   {
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
     dob: { type: Date, required: true }, // birth date
-    gender: { type: String, enum: ['male','female'], required: true },
+    gender: { type: String, enum: ['male','female','other'], required: true },
     allergies: [{ type: String, trim: true }],         
     medicalHistory: [{ type: String, trim: true }],
     contact: { type: ContactSchema, default: {} }, 
