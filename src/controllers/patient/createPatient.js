@@ -1,5 +1,5 @@
-import { validatePatientCreate } from "../../validators/patient/patientCreate"
-import Patient from "../../models/Patient"
+import { validatePatientCreate } from "../../validators/patient/patientCreate.js"
+import Patient from "../../models/Patient.js"
 
 export async function createPatient(req, res){
     try {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Patient from '../../models/Patient'
+import Patient from '../../models/Patient.js'
 
 export async function archivePatient(req,res){
     try {
@@ -7,7 +7,7 @@ export async function archivePatient(req,res){
         if(!mongoose.isValidObjectId(patientId))
             return res.status(400).json({message : 'Invalid patientId'})
 
-        const updated = await Patient.findByIdAndUpdate(patientId, { isActive: false }, { new: true }) // new doc
+        const updated = await Patient.findByIdAndUpdate(patientId, { isActive: false }, { new: true })// new doc
         if(!updated) return res.status(404).json({message: 'Patient not found '})
         return res.status(200).json({patient: updated})
     } catch (err) {

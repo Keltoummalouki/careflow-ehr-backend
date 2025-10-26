@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import Patient from '../../models/Patient'
-import { validatePatientUpdate } from '../../validators/patient/patientUpdate'
+import Patient from '../../models/Patient.js'
+import { validatePatientUpdate } from '../../validators/patient/patientUpdate.js'
 
 export async function updatePatient(req,res){
     try {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Patient from '../../models/Patient'
+import Patient from '../../models/Patient.js'
 
 export async function getPatientById(req,res){
     try {
