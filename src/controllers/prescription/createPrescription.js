@@ -2,7 +2,7 @@ import Prescription from '../../models/Prescription.js'
 import Consultation from '../../models/Consultation.js'
 import Patient from '../../models/Patient.js'
 import Pharmacy from '../../models/Pharmacy.js'
-import { createPrescriptionSchema } from '../../validators/prescriptionValidators.js'
+import { createPrescriptionSchema } from '../../validators/prescription/prescription.js'
 
 export async function createPrescription(req, res) {
   try {

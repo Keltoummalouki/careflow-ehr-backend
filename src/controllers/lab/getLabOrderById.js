@@ -1,5 +1,5 @@
 import LabOrder from '../../models/LabOrder.js'
-import { labOrderIdSchema } from '../../validators/labOrderValidators.js'
+import { labOrderIdSchema } from '../../validators/labo/labOrderValidators.js'
 
 export async function getLabOrderById(req, res) {
   try {

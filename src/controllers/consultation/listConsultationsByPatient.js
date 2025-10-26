@@ -1,6 +1,6 @@
 import Consultation from '../../models/Consultation.js'
 import Patient from '../../models/Patient.js'
-import { patientConsultationsSchema } from '../../validators/consultationValidators.js'
+import { patientConsultationsSchema } from '../../validators/consultation/consultationValidators.js'
 
 export async function listConsultationsByPatient(req, res) {
   try {

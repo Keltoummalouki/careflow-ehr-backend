@@ -1,5 +1,5 @@
 import Prescription from '../../models/Prescription.js'
-import { prescriptionIdSchema, dispensePrescriptionSchema } from '../../validators/prescriptionValidators.js'
+import { prescriptionIdSchema, dispensePrescriptionSchema } from '../../validators/prescription/prescription.js'
 
 export async function dispensePrescription(req, res) {
   try {

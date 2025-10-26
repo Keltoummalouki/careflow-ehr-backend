@@ -1,5 +1,5 @@
 import Consultation from '../../models/Consultation.js'
-import { consultationIdSchema } from '../../validators/consultationValidators.js'
+import { consultationIdSchema } from '../../validators/consultation/consultationValidators.js'
 
 export async function getConsultationById(req, res) {
   try {

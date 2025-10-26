@@ -1,6 +1,6 @@
 import MedicalDocument from '../../models/MedicalDocument.js'
 import minioService from '../../services/minioService.js'
-import { documentIdSchema } from '../../validators/documentValidators.js'
+import { documentIdSchema } from '../../validators/document/documentValidators.js'
 
 export async function downloadDocument(req, res) {
   try {

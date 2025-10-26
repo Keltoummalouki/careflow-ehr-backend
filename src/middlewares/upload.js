@@ -1,5 +1,5 @@
 import multer from 'multer'
-import { fileValidation } from '../validators/documentValidators.js'
+import { fileValidation } from '../validators/document/documentValidators.js'
 
 // Configuration de multer pour stocker en mémoire
 const storage = multer.memoryStorage()

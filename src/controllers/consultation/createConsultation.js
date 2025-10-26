@@ -1,7 +1,7 @@
 import Consultation from "../../models/Consultation.js";
 import Appointment from "../../models/Appointment.js";
 import Patient from "../../models/Patient.js";
-import { createConsultationSchema } from "../../validators/consultationValidators.js";
+import { createConsultationSchema } from "../../validators/consultation/consultationValidators.js";
 
 export async function createConsultation(req, res) {
   try {

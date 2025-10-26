@@ -1,6 +1,6 @@
 import Prescription from '../../models/Prescription.js'
 import Patient from '../../models/Patient.js'
-import { patientPrescriptionsSchema } from '../../validators/prescriptionValidators.js'
+import { patientPrescriptionsSchema } from '../../validators/prescription/prescription.js'
 
 export async function listPrescriptionsByPatient(req, res) {
   try {

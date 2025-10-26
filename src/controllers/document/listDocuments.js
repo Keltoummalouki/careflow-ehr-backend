@@ -1,6 +1,6 @@
 import MedicalDocument from '../../models/MedicalDocument.js'
 import Patient from '../../models/Patient.js'
-import { listDocumentsSchema } from '../../validators/documentValidators.js'
+import { listDocumentsSchema } from '../../validators/document/documentValidators.js'
 
 export async function listDocuments(req, res) {
   try {

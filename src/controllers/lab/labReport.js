@@ -1,5 +1,5 @@
 import LabOrder from '../../models/LabOrder.js'
-import { labOrderIdSchema } from '../../validators/labOrderValidators.js'
+import { labOrderIdSchema } from '../../validators/labo/labOrderValidators.js'
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs/promises'
@@ -30,7 +30,7 @@ const fileFilter = (req, file, cb) => {
   }
 }
 
-export const upload = multer({
+export const upload = multer({ // Returns a Multer instance that provides several methods for generating middleware that process files uploaded in multipart/form-data format.
   storage,
   fileFilter,
   limits: {

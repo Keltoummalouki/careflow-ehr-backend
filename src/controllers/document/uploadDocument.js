@@ -2,7 +2,7 @@ import MedicalDocument from '../../models/MedicalDocument.js'
 import Patient from '../../models/Patient.js'
 import Consultation from '../../models/Consultation.js'
 import minioService from '../../services/minioService.js'
-import { uploadDocumentSchema, fileValidation } from '../../validators/documentValidators.js'
+import { uploadDocumentSchema, fileValidation } from '../../validators/document/documentValidators.js'
 
 export async function uploadDocument(req, res) {
   try {

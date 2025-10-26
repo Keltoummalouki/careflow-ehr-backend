@@ -1,5 +1,5 @@
 import MedicalDocument from '../../models/MedicalDocument.js'
-import { documentIdSchema } from '../../validators/documentValidators.js'
+import { documentIdSchema } from '../../validators/document/documentValidators.js'
 
 export async function getDocument(req, res) {
   try {

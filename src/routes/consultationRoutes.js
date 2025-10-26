@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { requireAuth } from '../middlewares/auth/requireAuth.js'
 import { requireRole } from '../middlewares/auth/requireRole.js'
+import { authorizeRoles } from '../middlewares/auth/authorizeRoles.js'
 import { createConsultation } from '../controllers/consultation/createConsultation.js'
 import { getConsultationById } from '../controllers/consultation/getConsultationById.js'
 import { updateConsultation } from '../controllers/consultation/updateConsultation.js'

@@ -1,6 +1,6 @@
 import LabOrder from '../../models/LabOrder.js'
 import Patient from '../../models/Patient.js'
-import { patientLabOrdersSchema } from '../../validators/labOrderValidators.js'
+import { patientLabOrdersSchema } from '../../validators/labo/labOrderValidators.js'
 
 export async function listLabOrdersByPatient(req, res) {
   try {

@@ -1,12 +1,12 @@
 import '../setup.js'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import request from 'supertest'
 import { expect } from 'chai'
 import app from '../../src/app.js'
 import User from '../../src/models/User.js'
 import Patient from '../../src/models/Patient.js'
 import Role from '../../src/models/Role.js'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 
 describe('Appointments Integration Tests', function() {
     this.timeout(20000)
