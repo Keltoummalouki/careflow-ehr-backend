@@ -1,11 +1,11 @@
 import { Router } from 'express'
-import { requireAuth } from '../middlewares/auth/requireAuth'
-import { authorizeRoles } from '../middlewares/auth/authorizeRoles'
-import { createPatient } from '../controllers/patient/createPatient'
-import { updatePatient } from '../controllers/patient/updatePatient'
-import { getPatientById } from '../controllers/patient/getPatientById'
-import { listPatients } from '../controllers/patient/listPatients'
-import { archivePatient } from '../controllers/patient/archivePatient'
+import { requireAuth } from '../middlewares/auth/requireAuth.js'
+import { authorizeRoles } from '../middlewares/auth/authorizeRoles.js'
+import { createPatient } from '../controllers/patient/createPatient.js'
+import { updatePatient } from '../controllers/patient/updatePatient.js'
+import { getPatientById } from '../controllers/patient/getPatientById.js'
+import { listPatients } from '../controllers/patient/listPatients.js'
+import { archivePatient } from '../controllers/patient/archivePatient.js'
 
 const router = Router()
 

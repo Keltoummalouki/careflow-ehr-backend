@@ -1,13 +1,19 @@
 import { Router } from 'express'
-import { requireAuth } from '../middlewares/auth/requireAuth'
-import { authorizeRoles } from '../middlewares/auth/authorizeRoles'
+import { requireAuth } from '../middlewares/auth/requireAuth.js'
+import { authorizeRoles } from '../middlewares/auth/authorizeRoles.js'
+import {createAppointment} from '../controllers/appointment/createAppointment.js'
+import {updateAppointmentStatus} from '../controllers/appointment/updateAppointmentStatus.js'
+import {rescheduleAppointment} from '../controllers/appointment/rescheduleAppointment.js'
+import {listAppointmentsByPractitioner} from '../controllers/appointment/listAppointmentsByPractitioner.js'
+import {listAppointmentsByPatient} from '../controllers/appointment/listAppointmentsByPatient.js'
+import {availability} from '../controllers/appointment/availability.js'
 
 
 const router = Router()
 
 router.post('/', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), createAppointment)
 
-router.post('/', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), createAppointment)
+router.put('/:appointmentId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), rescheduleAppointment)
 
 router.patch('/:appointmentId/status', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), updateAppointmentStatus)
 
