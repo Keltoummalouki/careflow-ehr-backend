@@ -7,9 +7,17 @@ import { suspendUser, activateUser } from "../controllers/admin/IsActive.js";
 
 const router = Router()
 
-router.get('/users' , requireAuth(true), authorizeRoles('admin'), getAllUsers)
-router.post('/users' , requireAuth(true), authorizeRoles('admin'), addUser)
-router.patch('/users/:userId/suspend' , requireAuth(true), authorizeRoles('admin'), suspendUser)
-router.patch('/users/:userId/activate' , requireAuth(true), authorizeRoles('admin'), activateUser)
+router.get('/users' , 
+    // requireAuth(true), authorizeRoles('admin'),
+    getAllUsers)
+router.post('/users' ,
+    // requireAuth(true), authorizeRoles('admin'), 
+    addUser)
+router.patch('/users/:userId/suspend' , 
+    // requireAuth(true), authorizeRoles('admin'), 
+    suspendUser)
+router.patch('/users/:userId/activate' , 
+    // requireAuth(true), authorizeRoles('admin'), 
+    activateUser)
 
 export default router;

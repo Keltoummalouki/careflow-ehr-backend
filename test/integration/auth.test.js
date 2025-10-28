@@ -1,4 +1,5 @@
 import '../setup.js'
+import bcrypt from 'bcryptjs'
 import request from 'supertest'
 import { expect } from 'chai'
 import app from '../../src/app.js'
@@ -11,7 +12,12 @@ describe('Auth Integration Tests', function() {
 
     beforeEach(async function() {
         this.timeout(20000)
-        patientRole = await Role.create({ name: 'patient', isActive: true })
+        // create-or-get the patient role to avoid duplicate key errors between tests
+        patientRole = await Role.findOneAndUpdate(
+            { name: 'patient' },
+            { $setOnInsert: { name: 'patient', isActive: true } },
+            { upsert: true, new: true }
+        )
     })
 
     describe('POST /api/auth/register', () => {

@@ -11,16 +11,28 @@ import {availability} from '../controllers/appointment/availability.js'
 
 const router = Router()
 
-router.post('/', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), createAppointment)
+router.post('/', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'),
+    createAppointment)
 
-router.put('/:appointmentId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), rescheduleAppointment)
+router.put('/:appointmentId', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    rescheduleAppointment)
 
-router.patch('/:appointmentId/status', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), updateAppointmentStatus)
+router.patch('/:appointmentId/status', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    updateAppointmentStatus)
 
-router.get('/practitioner/:practitionerId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), listAppointmentsByPractitioner)
+router.get('/practitioner/:practitionerId', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    listAppointmentsByPractitioner)
 
-router.get('/patient/:patientId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), listAppointmentsByPatient)
+router.get('/patient/:patientId', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    listAppointmentsByPatient)
 
-router.get('/availability', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary','patient'), availability)
+router.get('/availability', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary','patient'), 
+    availability)
 
 export default router

@@ -4,47 +4,32 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-let mongoServer
+// Start in-memory MongoDB and connect Mongoose BEFORE tests run
+const mongoServer = await MongoMemoryServer.create()
+const uri = mongoServer.getUri()
 
+await mongoose.connect(uri) // wait until connected
+process.env.MONGO_URI = uri
+console.log('MongoMemoryServer connected')
+
+// mocha hooks for cleanup between/after tests
 export const mochaHooks = {
-    async beforeAll() {
-        this.timeout(60000)
-        
-        // Déconnecter toute connexion existante
-        if (mongoose.connection.readyState !== 0) {
-            await mongoose.disconnect()
-        }
-
-        mongoServer = await MongoMemoryServer.create()
-        const uri = mongoServer.getUri()
-        
-        await mongoose.connect(uri, {
-            serverSelectionTimeoutMS: 5000
-        })
-        
-        console.log('MongoDB Memory Server connected')
-    },
-
-    async afterAll() {
-        this.timeout(60000)
-        
-        if (mongoose.connection.readyState !== 0) {
-            await mongoose.disconnect()
-        }
-        
-        if (mongoServer) {
-            await mongoServer.stop()
-        }
-        
-        console.log('MongoDB Memory Server stopped')
-    },
-
-    async afterEach() {
-        if (mongoose.connection.readyState === 1) {
-            const collections = mongoose.connection.collections
-            for (const key in collections) {
-                await collections[key].deleteMany({})
-            }
-        }
+  async afterEach() {
+    if (mongoose.connection.readyState === 1) {
+      const collections = mongoose.connection.collections
+      for (const key in collections) {
+        await collections[key].deleteMany({})
+      }
     }
+  },
+
+  async afterAll() {
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect()
+    }
+    if (mongoServer) {
+      await mongoServer.stop()
+    }
+    console.log('MongoMemoryServer stopped')
+  }
 }
