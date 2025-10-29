@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import BlacklistedToken from '../../models/BlacklistedToken.js'
+import BlacklistedToken from '../../models/blacklistedToken.js'
 import { validateLogout } from '../../validators/auth/logoutValidator.js'
 
 

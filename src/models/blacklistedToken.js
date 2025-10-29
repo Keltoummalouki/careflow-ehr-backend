@@ -9,4 +9,5 @@ const BlacklistedTokenSchema = new mongoose.Schema(
 
 BlacklistedTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export default mongoose.model('BlacklistedToken', BlacklistedTokenSchema);
+// Check if model already exists before compiling
+export default mongoose.models.BlacklistedToken || mongoose.model('BlacklistedToken', BlacklistedTokenSchema);
