@@ -33,7 +33,7 @@ export async function listConsultations(req, res) {
     // Si praticien demande ses consultations ou admin filtre par praticien
     if (practitionerId) {
       query.practitionerId = practitionerId
-    } else if (req.user.role === 'doctor' || req.user.role === 'nurse') {
+    } else if (req.user && (req.user.role === 'doctor' || req.user.role === 'nurse')) {
       // Par défaut, les praticiens voient leurs propres consultations
       query.practitionerId = req.user.sub
     }

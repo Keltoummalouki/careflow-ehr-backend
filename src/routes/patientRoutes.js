@@ -9,14 +9,24 @@ import { archivePatient } from '../controllers/patient/archivePatient.js'
 
 const router = Router()
 
-router.get('/', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), listPatients)
+router.get('/', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'),
+    listPatients)
 
-router.get('/:patientId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), getPatientById)
+router.get('/:patientId', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    getPatientById)
 
-router.post('/', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), createPatient)
+router.post('/', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    createPatient)
 
-router.put('/:patientId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), updatePatient)
+router.put('/:patientId',
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    updatePatient)
 
-router.delete('/:patientId', requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), archivePatient)
+router.delete('/:patientId', 
+    // requireAuth(true), authorizeRoles('admin','doctor','nurse','secretary'), 
+    archivePatient)
 
 export default router

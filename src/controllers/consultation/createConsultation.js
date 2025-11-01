@@ -1,11 +1,11 @@
 import Consultation from "../../models/Consultation.js";
 import Appointment from "../../models/Appointment.js";
 import Patient from "../../models/Patient.js";
+import User from "../../models/User.js";
 import { createConsultationSchema } from "../../validators/consultation/consultationValidators.js";
 
 export async function createConsultation(req, res) {
   try {
-    // Validation des données
     const { error, value } = createConsultationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -25,51 +25,52 @@ export async function createConsultation(req, res) {
       status,
     } = value;
 
-    // Vérifier que le rendez-vous existe
     const appointment = await Appointment.findById(appointmentId);
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
-    // Vérifier que le patient existe
-    const patient = await Patient.findById(patientId);
+    // Chercher le patient de manière flexible (Patient._id OU userId)
+    let patient = await Patient.findById(patientId);
+    
     if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
+      patient = await Patient.findOne({ userId: patientId });
+    }
+    
+    if (!patient) {
+      return res.status(404).json({ 
+        message: "Patient profile not found. Please create a patient profile first.",
+      });
     }
 
-    // Vérifier que le rendez-vous appartient bien au patient
-    if (appointment.patientId.toString() !== patientId) {
-      return res
-        .status(400)
-        .json({ message: "Appointment does not belong to this patient" });
-    }
+    // Vérifier que le rendez-vous appartient bien au patient (accepter User ID OU Patient._id)
+    const appointmentPatientId = appointment.patientId.toString();
+    const patientDocId = patient._id.toString();
+    const patientUserId = patient.userId.toString();
 
-    // Vérifier que le praticien est autorisé
-    const practitionerId = req.user.sub;
-    if (appointment.practitionerId.toString() !== practitionerId) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "You are not authorized to create a consultation for this appointment",
-        });
+    if (appointmentPatientId !== patientDocId && appointmentPatientId !== patientUserId) {
+      return res.status(400).json({ 
+        message: "Appointment does not belong to this patient",
+        debug: {
+          appointmentPatientId,
+          patientDocId,
+          patientUserId
+        }
+      });
     }
 
     // Vérifier qu'une consultation n'existe pas déjà pour ce rendez-vous
     const existingConsultation = await Consultation.findOne({ appointmentId });
     if (existingConsultation) {
-      return res
-        .status(409)
-        .json({
-          message: "A consultation already exists for this appointment",
-        });
+      return res.status(409).json({
+        message: "A consultation already exists for this appointment",
+      });
     }
 
-    // Créer la consultation
     const consultation = await Consultation.create({
       appointmentId,
-      patientId,
-      practitionerId,
+      patientId: patient._id,
+      practitionerId: appointment.practitionerId, 
       vitalSigns,
       chiefComplaint,
       diagnosis,
@@ -80,17 +81,21 @@ export async function createConsultation(req, res) {
 
     // Populer les références
     await consultation.populate([
-      { path: "patientId", select: "firstName lastName dob gender" },
+      { path: "patientId", select: "dob gender userId" },
       { path: "practitionerId", select: "firstName lastName" },
     ]);
+
+    // Populer les infos User du patient
+    await consultation.populate({
+      path: "patientId",
+      populate: { path: "userId", select: "firstName lastName email" }
+    });
 
     return res.status(201).json({
       message: "Consultation created successfully",
       consultation,
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Server error", error: err.message });
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 }

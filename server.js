@@ -12,7 +12,7 @@ const startServer = async () => {
 
         await initializeBucket()
 
-        const port = process.env.PORT || 3001;
+        const port = process.env.PORT || 5001;
 
         app.listen(port, () => {
             console.log(`Listening on port ${port}`)

@@ -4,7 +4,7 @@ export default function Dto(u) { // Data Transfer Object -> Transfer object with
         firstName: u.firstName,
         lastName: u.lastName,
         email: u.email,
-        role: u.roleId?.name,
+        role: u.roleId.name,
         isActive: u.isActive,
         createdAt: u.createdAt,
         updatedAt: u.updatedAt

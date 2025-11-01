@@ -15,8 +15,7 @@ const InsuranceSchema = new mongoose.Schema({
 
 const PatientSchema = new mongoose.Schema(   
   {
-    firstName: { type: String, required: true, trim: true },
-    lastName: { type: String, required: true, trim: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true }, 
     dob: { type: Date, required: true }, // birth date
     gender: { type: String, enum: ['male','female','other'], required: true },
     allergies: [{ type: String, trim: true }],         
@@ -29,6 +28,7 @@ const PatientSchema = new mongoose.Schema(
 )
 
 PatientSchema.index({ 'contact.phone': 1, 'contact.email': 1})
+PatientSchema.index({ userId: 1 }) // ✅ AJOUTER CET INDEX
 
 const Patient = mongoose.model('Patient', PatientSchema)
 

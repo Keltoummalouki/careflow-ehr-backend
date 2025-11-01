@@ -1,6 +1,7 @@
 import MedicalDocument from '../../models/MedicalDocument.js'
 import minioService from '../../services/minioService.js'
 import { documentIdSchema } from '../../validators/document/documentValidators.js'
+import Patient from '../../models/Patient.js' 
 
 export async function downloadDocument(req, res) {
   try {
@@ -17,19 +18,21 @@ export async function downloadDocument(req, res) {
 
     // Récupérer le document
     const document = await MedicalDocument.findById(documentId)
-      .populate('patientId', 'firstName lastName')
+      .populate('patientId', 'userId') // on a besoin de lier au User
 
     if (!document) {
       return res.status(404).json({ message: 'Document not found' })
     }
 
-    // Vérifier les autorisations
-    const userRole = req.user.role
-    const userId = req.user.sub
+    // Autorisations (skip si pas d'auth)
+    const userRole = req.user?.role
+    const userId = req.user?.sub
 
-    // Si patient, vérifier qu'il s'agit bien de son document
-    if (userRole === 'patient' && document.patientId._id.toString() !== userId) {
-      return res.status(403).json({ message: 'You are not authorized to download this document' })
+    if (userRole === 'patient') {
+      const selfPatient = await Patient.findOne({ userId })
+      if (!selfPatient || selfPatient._id.toString() !== document.patientId._id.toString()) {
+        return res.status(403).json({ message: 'You are not authorized to download this document' })
+      }
     }
 
     // Générer une URL présignée (valide 10 minutes)
