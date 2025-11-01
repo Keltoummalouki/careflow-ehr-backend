@@ -4,6 +4,11 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+// Ensure test env + JWT secrets for login
+process.env.NODE_ENV = 'test'
+process.env.JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'test_access_secret'
+process.env.JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'test_refresh_secret'
+
 // Start in-memory MongoDB and connect Mongoose BEFORE tests run
 const mongoServer = await MongoMemoryServer.create()
 const uri = mongoServer.getUri()
