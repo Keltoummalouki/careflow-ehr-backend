@@ -1,28 +1,28 @@
+import User from '../../models/User.js'
+import Role from '../../models/Role.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import User from '../../models/User.js'
-import { validateLogin } from '../../validators/auth/loginValidator.js'
+import Dto from '../admin/Dto.js'
 
 export async function login(req, res) {
   try {
-    const { error, value } = validateLogin(req.body)
-    if (error) {
-      return res.status(400).json({
-        message: 'Invalid data',
-        details: error.details.map(d => d.message),
-      })
+    const { email, password } = req.body
+
+    const user = await User.findOne({ email: email?.toLowerCase().trim() })
+      .populate('roleId', 'name') // ensure role name is available
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    const { email, password } = value
-
-    const user = await User.findOne({ email: email.toLowerCase() }).populate('roleId')
-    if (!user) return res.status(401).json({ message: 'Invalid credentials' })
-    if (!user.isActive) return res.status(403).json({ message: 'Account disabled' })
-
     const ok = await bcrypt.compare(password, user.password)
-    if (!ok) return res.status(401).json({ message: 'Invalid credentials' })
+    if (!ok) {
+      return res.status(401).json({ message: 'Invalid credentials' })
+    }
 
-    const roleName = user.roleId?.name || 'patient'
+    // role name (fallbacks to string role if present)
+    const roleName = user.roleId?.name || user.role || 'patient'
+
     const accessToken = jwt.sign(
       { sub: user._id.toString(), role: roleName },
       process.env.JWT_ACCESS_SECRET,
@@ -35,15 +35,9 @@ export async function login(req, res) {
     )
 
     return res.status(200).json({
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: roleName,
-        isActive: user.isActive,
-      },
-      tokens: { accessToken, refreshToken },
+      user: Dto({ ...user.toObject(), roleId: { name: roleName } }),
+      token: accessToken, // alias to satisfy older tests
+      tokens: { accessToken, refreshToken }
     })
   } catch (err) {
     return res.status(500).json({ message: 'Server error', error: err.message })
