@@ -118,10 +118,10 @@ describe('Auth Integration Tests', function() {
             expect(res.status).to.equal(200)
             
             // 2. La réponse doit contenir un "token" (clé d'accès)
-            expect(res.body).to.have.property('token')
-            
-            // 3. Le token ne doit pas être vide
-            expect(res.body.token).to.be.a('string')
+            expect(res.body).to.have.property('tokens')
+            expect(res.body.tokens).to.have.property('accessToken')
+            expect(res.body.tokens.accessToken).to.be.a('string')
+            expect(res.body.tokens).to.have.property('refreshToken')
         })
 
         // TEST 4 : Refuser des identifiants incorrects
