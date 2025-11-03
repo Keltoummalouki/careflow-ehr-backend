@@ -1,7 +1,7 @@
 # CareFlow EHR
 
 ## Description
-CareFlow EHR est une application de gestion de dossiers médicaux électroniques (EHR) permettant aux professionnels de santé de gérer les patients, les rendez-vous et les informations médicales de manière sécurisée et efficace.
+CareFlow EHR est une application de gestion de dossiers médicaux électroniques (EHR) permettant aux professionnels de santé de gérer les patients, les rendez-vous et les informations médicales
 
 ---
 
@@ -27,7 +27,7 @@ CareFlow EHR est une application de gestion de dossiers médicaux électroniques
 1. Cloner le dépôt :
    ```bash
    git clone https://github.com/votre-utilisateur/careflow-ehr.git
-````
+   ```
 
 2. Se déplacer dans le dossier du projet :
 
@@ -39,7 +39,7 @@ CareFlow EHR est une application de gestion de dossiers médicaux électroniques
    ```bash
    npm install
    ```
-4. Configurer les variables d’environnement dans un fichier `.env` :
+4. Configurer les variables d'environnement dans un fichier `.env` :
 
    ```env
    PORT=5000
@@ -175,6 +175,8 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 ## Contact
 
 Pour toute question ou suggestion : [keltoummalouki@gmail.com](mailto:keltoummalouki@gmail.com)
+```
 
-```
-```
+---
+
+**Note :** Ce README contient également une référence à une documentation Postman complète avec 48 endpoints détaillés dans le dossier `postman/README.md`. Si tu as besoin du code complet de ce fichier aussi, dis-moi ! 📋
