@@ -1,4 +1,4 @@
-export default function Dto(u) {
+export default function Dto(u) { 
   return {
     id: u._id,
     firstName: u.firstName,

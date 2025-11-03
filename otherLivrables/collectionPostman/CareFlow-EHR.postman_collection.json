@@ -1,0 +1,1309 @@
+{
+  "info": {
+    "_postman_id": "careflow-ehr-api-2025",
+    "name": "CareFlow EHR API",
+    "description": "Collection complète générée pour tester toutes les fonctionnalités du backend CareFlow EHR",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.id) {",
+                  "        pm.environment.set('userId', jsonData.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Inscription d'un nouvel utilisateur (rôle patient par défaut)"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.environment.set('authToken', jsonData.token);",
+                  "    }",
+                  "    if (jsonData.accessToken) {",
+                  "        pm.environment.set('authToken', jsonData.accessToken);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Connexion d'un utilisateur existant"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Déconnexion de l'utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Rafraîchir le token d'authentification"
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/password/forgot",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "password", "forgot"]
+            },
+            "description": "Demander la réinitialisation du mot de passe"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"reset-token-here\",\n  \"newPassword\": \"newPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/password/reset",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "password", "reset"]
+            },
+            "description": "Réinitialiser le mot de passe avec le token reçu"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users"]
+            },
+            "description": "Obtenir la liste de tous les utilisateurs (admin seulement)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.user && jsonData.user.id) {",
+                  "        pm.environment.set('createdUserId', jsonData.user.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"doctor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users"]
+            },
+            "description": "Créer un nouvel utilisateur avec un rôle spécifique (admin seulement)"
+          },
+          "response": []
+        },
+        {
+          "name": "Suspend User",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{createdUserId}}/suspend",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{createdUserId}}", "suspend"]
+            },
+            "description": "Suspendre un utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Activate User",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{createdUserId}}/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{createdUserId}}", "activate"]
+            },
+            "description": "Activer un utilisateur suspendu"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "List Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Obtenir la liste des patients avec pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.patient && jsonData.patient._id) {",
+                  "        pm.environment.set('patientId', jsonData.patient._id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"dob\": \"1990-05-15\",\n  \"gender\": \"male\",\n  \"allergies\": [\"penicillin\", \"peanuts\"],\n  \"medicalHistory\": [\"diabetes\", \"hypertension\"],\n  \"contact\": {\n    \"phone\": \"+1234567890\",\n    \"email\": \"patient@example.com\",\n    \"address\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"country\": \"USA\"\n  },\n  \"insurance\": {\n    \"provider\": \"HealthCare Inc\",\n    \"policyNumber\": \"POL123456\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            },
+            "description": "Créer un nouveau profil patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            },
+            "description": "Obtenir les détails d'un patient spécifique"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"allergies\": [\"penicillin\", \"peanuts\", \"shellfish\"],\n  \"contact\": {\n    \"phone\": \"+1234567891\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            },
+            "description": "Mettre à jour les informations d'un patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Archive Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            },
+            "description": "Archiver un patient (soft delete)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "Check Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/availability?practitionerId={{practitionerId}}&date=2025-11-15&slotMinutes=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "availability"],
+              "query": [
+                {
+                  "key": "practitionerId",
+                  "value": "{{practitionerId}}"
+                },
+                {
+                  "key": "date",
+                  "value": "2025-11-15"
+                },
+                {
+                  "key": "slotMinutes",
+                  "value": "30"
+                }
+              ]
+            },
+            "description": "Vérifier la disponibilité d'un praticien pour une date donnée"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.appointment && jsonData.appointment._id) {",
+                  "        pm.environment.set('appointmentId', jsonData.appointment._id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"practitionerId\": \"{{practitionerId}}\",\n  \"start\": \"2025-11-15T09:00:00.000Z\",\n  \"end\": \"2025-11-15T09:30:00.000Z\",\n  \"reason\": \"Consultation de routine\",\n  \"notes\": \"Premier rendez-vous\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments"]
+            },
+            "description": "Créer un nouveau rendez-vous"
+          },
+          "response": []
+        },
+        {
+          "name": "List Appointments by Patient",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/patient/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "patient", "{{patientId}}"]
+            },
+            "description": "Obtenir tous les rendez-vous d'un patient"
+          },
+          "response": []
+        },
+        {
+          "name": "List Appointments by Practitioner",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/practitioner/{{practitionerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "practitioner", "{{practitionerId}}"]
+            },
+            "description": "Obtenir tous les rendez-vous d'un praticien"
+          },
+          "response": []
+        },
+        {
+          "name": "Reschedule Appointment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start\": \"2025-11-16T10:00:00.000Z\",\n  \"end\": \"2025-11-16T10:30:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}"]
+            },
+            "description": "Reprogrammer un rendez-vous existant"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Appointment Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}", "status"]
+            },
+            "description": "Mettre à jour le statut d'un rendez-vous (scheduled, completed, cancelled)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Consultations",
+      "item": [
+        {
+          "name": "List All Consultations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/consultations?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["consultations"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Obtenir toutes les consultations"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Consultation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.consultation && jsonData.consultation._id) {",
+                  "        pm.environment.set('consultationId', jsonData.consultation._id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointmentId\": \"{{appointmentId}}\",\n  \"patientId\": \"{{patientId}}\",\n  \"vitalSigns\": {\n    \"bloodPressure\": {\n      \"systolic\": 120,\n      \"diastolic\": 80\n    },\n    \"heartRate\": 72,\n    \"temperature\": 36.8,\n    \"weight\": 70,\n    \"height\": 175,\n    \"respiratoryRate\": 16,\n    \"oxygenSaturation\": 98\n  },\n  \"chiefComplaint\": \"Douleur thoracique\",\n  \"diagnosis\": [\n    {\n      \"code\": \"I20.0\",\n      \"description\": \"Angine de poitrine instable\"\n    }\n  ],\n  \"procedures\": [\n    {\n      \"code\": \"ECG\",\n      \"description\": \"Électrocardiogramme\"\n    }\n  ],\n  \"notes\": \"Patient présente des symptômes depuis 2 jours. ECG normal.\",\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/consultations",
+              "host": ["{{baseUrl}}"],
+              "path": ["consultations"]
+            },
+            "description": "Créer une nouvelle consultation"
+          },
+          "response": []
+        },
+        {
+          "name": "List Consultations by Patient",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/consultations/patient/{{patientId}}?page=1&limit=10&status=completed",
+              "host": ["{{baseUrl}}"],
+              "path": ["consultations", "patient", "{{patientId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "completed",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Obtenir toutes les consultations d'un patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Consultation by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/consultations/{{consultationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["consultations", "{{consultationId}}"]
+            },
+            "description": "Obtenir les détails d'une consultation"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Consultation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Patient à revoir dans 2 semaines. Prescription mise à jour.\",\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/consultations/{{consultationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["consultations", "{{consultationId}}"]
+            },
+            "description": "Mettre à jour une consultation existante"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Consultation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/consultations/{{consultationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["consultations", "{{consultationId}}"]
+            },
+            "description": "Supprimer une consultation"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Upload Document (multipart)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.document && jsonData.document._id) {",
+                  "        pm.environment.set('documentId', jsonData.document._id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "patientId",
+                  "value": "{{patientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "consultationId",
+                  "value": "{{consultationId}}",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "report",
+                  "description": "imaging, report, prescription, lab_result, other",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Résultats d'analyse de sang",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "[\"urgent\",\"blood-test\"]",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "file",
+                  "description": "Fichier PDF, JPEG ou PNG (max 20MB)",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/documents/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "upload"]
+            },
+            "description": "Uploader un document médical (PDF, JPEG, PNG - max 20MB)"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Document from Path (DEV)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"consultationId\": \"{{consultationId}}\",\n  \"category\": \"report\",\n  \"description\": \"Import depuis le serveur\",\n  \"filePath\": \"coding-stickers.jpg\",\n  \"tags\": [\"import\", \"dev\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/documents/upload-from-path",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "upload-from-path"]
+            },
+            "description": "Uploader un document depuis un chemin sur le serveur (DEV seulement)"
+          },
+          "response": []
+        },
+        {
+          "name": "List Documents by Patient",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/patient/{{patientId}}?page=1&limit=10&category=report",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "patient", "{{patientId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "category",
+                  "value": "report",
+                  "disabled": true
+                },
+                {
+                  "key": "tags",
+                  "value": "urgent,blood-test",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Obtenir tous les documents d'un patient avec filtres optionnels"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "{{documentId}}"]
+            },
+            "description": "Obtenir les métadonnées d'un document"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Download URL (presigned)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/{{documentId}}/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "{{documentId}}", "download"]
+            },
+            "description": "Obtenir une URL présignée pour télécharger le document (valide 10 minutes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "{{documentId}}"]
+            },
+            "description": "Supprimer un document"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Lab Orders",
+      "item": [
+        {
+          "name": "List All Lab Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Obtenir toutes les ordonnances de laboratoire"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Lab Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.labOrder && jsonData.labOrder._id) {",
+                  "        pm.environment.set('labOrderId', jsonData.labOrder._id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consultationId\": \"{{consultationId}}\",\n  \"patientId\": \"{{patientId}}\",\n  \"tests\": [\n    {\n      \"code\": \"CBC\",\n      \"name\": \"Complete Blood Count\",\n      \"category\": \"Hematology\"\n    },\n    {\n      \"code\": \"GLUC\",\n      \"name\": \"Glucose (Fasting)\",\n      \"category\": \"Chemistry\"\n    }\n  ],\n  \"status\": \"ordered\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders"]
+            },
+            "description": "Créer une nouvelle ordonnance de laboratoire"
+          },
+          "response": []
+        },
+        {
+          "name": "List Lab Orders by Patient",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders/patient/{{patientId}}?page=1&limit=10&status=completed",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders", "patient", "{{patientId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "completed",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Obtenir toutes les ordonnances de laboratoire d'un patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Lab Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders/{{labOrderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders", "{{labOrderId}}"]
+            },
+            "description": "Obtenir les détails d'une ordonnance de laboratoire"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Lab Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"sample_collected\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders/{{labOrderId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders", "{{labOrderId}}", "status"]
+            },
+            "description": "Mettre à jour le statut d'une ordonnance (ordered, sample_collected, processing, completed, cancelled)"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Lab Results (JSON)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"results\": [\n    {\n      \"testCode\": \"CBC\",\n      \"testName\": \"Complete Blood Count\",\n      \"value\": \"5.2\",\n      \"unit\": \"million cells/mcL\",\n      \"referenceRange\": \"4.5-5.5\",\n      \"isAbnormal\": false,\n      \"notes\": \"Within normal range\"\n    },\n    {\n      \"testCode\": \"GLUC\",\n      \"testName\": \"Glucose (Fasting)\",\n      \"value\": \"110\",\n      \"unit\": \"mg/dL\",\n      \"referenceRange\": \"70-100\",\n      \"isAbnormal\": true,\n      \"notes\": \"Légèrement élevé\"\n    }\n  ],\n  \"validatedBy\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders/{{labOrderId}}/results",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders", "{{labOrderId}}", "results"]
+            },
+            "description": "Uploader les résultats de laboratoire (format JSON)"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Lab Report (PDF)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "report",
+                  "description": "Rapport PDF",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders/{{labOrderId}}/report",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders", "{{labOrderId}}", "report"]
+            },
+            "description": "Uploader un rapport de laboratoire (fichier PDF)"
+          },
+          "response": []
+        },
+        {
+          "name": "Download Lab Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lab-orders/{{labOrderId}}/report",
+              "host": ["{{baseUrl}}"],
+              "path": ["lab-orders", "{{labOrderId}}", "report"]
+            },
+            "description": "Télécharger le rapport de laboratoire (URL présignée)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Prescriptions",
+      "item": [
+        {
+          "name": "Create Prescription",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.prescription && jsonData.prescription._id) {",
+                  "        pm.environment.set('prescriptionId', jsonData.prescription._id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consultationId\": \"{{consultationId}}\",\n  \"patientId\": \"{{patientId}}\",\n  \"pharmacyId\": \"{{pharmacyId}}\",\n  \"medication\": \"Amoxicilline 500mg\",\n  \"dosage\": \"500mg\",\n  \"route\": \"oral\",\n  \"frequency\": \"3 fois par jour\",\n  \"duration\": \"7 jours\",\n  \"renewals\": 0,\n  \"status\": \"signed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/prescriptions",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescriptions"]
+            },
+            "description": "Créer une nouvelle prescription (requiert authentification)"
+          },
+          "response": []
+        },
+        {
+          "name": "List Prescriptions by Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prescriptions/patient/{{patientId}}?page=1&limit=10&status=signed",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescriptions", "patient", "{{patientId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "signed",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Obtenir toutes les prescriptions d'un patient (requiert authentification)"
+          },
+          "response": []
+        },
+        {
+          "name": "List Prescriptions by Pharmacy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prescriptions/pharmacy/{{pharmacyId}}?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescriptions", "pharmacy", "{{pharmacyId}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Obtenir toutes les prescriptions d'une pharmacie (requiert authentification)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Prescription by ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prescriptions/{{prescriptionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescriptions", "{{prescriptionId}}"]
+            },
+            "description": "Obtenir les détails d'une prescription (requiert authentification)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Prescription",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"frequency\": \"2 fois par jour\",\n  \"duration\": \"10 jours\",\n  \"renewals\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/prescriptions/{{prescriptionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescriptions", "{{prescriptionId}}"]
+            },
+            "description": "Mettre à jour une prescription (requiert authentification)"
+          },
+          "response": []
+        },
+        {
+          "name": "Dispense Prescription",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dispensedBy\": \"{{userId}}\",\n  \"notes\": \"Dispensé avec conseils d'utilisation\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/prescriptions/{{prescriptionId}}/dispense",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescriptions", "{{prescriptionId}}", "dispense"]
+            },
+            "description": "Marquer une prescription comme dispensée (requiert authentification pharmacien)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Vérifier l'état de santé de l'API"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001/api",
+      "type": "default"
+    }
+  ]
+}

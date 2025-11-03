@@ -35,7 +35,7 @@ export async function downloadDocument(req, res) {
       }
     }
 
-    // Générer une URL présignée (valide 10 minutes)
+    // Générer une URL présignée
     const presignedUrl = await minioService.getPresignedDownloadUrl(
       document.storageKey,
       600 // 10 minutes
@@ -46,7 +46,7 @@ export async function downloadDocument(req, res) {
       downloadUrl: presignedUrl,
       expiresIn: 600, // seconds
       document: {
-        _id: document._id,
+        _id: document._id, 
         fileName: document.fileName,
         fileSize: document.fileSize,
         mimeType: document.mimeType,
